@@ -1,15 +1,14 @@
-# -*- coding: utf-8 -*-
+# # -*- coding: utf-8 -*-
 
-from odoo import models, fields, api
+# from odoo import models, fields, api
 
 
-class EstatePropertyType(models.Model):
-    _name = 'estate.property.type'
-    _description = 'Estate_Property_Type.Estate_Property_Type'
+# class EstatePropertyType(models.Model):
+#     _name = 'estate.property.type'
+#     _description = 'Estate_Property_Type.Estate_Property_Type'
 
-    name = fields.Char(required=True)
+#     name = fields.Char(required=True)
     
-
 
 
 

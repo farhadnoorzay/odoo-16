@@ -2,16 +2,14 @@
 {
     'name': "Estate",
 
-    'summary': """
-        Short (1 phrase/line) summary of the module's purpose, used as
-        subtitle on modules listing or apps.openerp.com""",
-
+     'summary': """
+        Estate""",
     'description': """
-        Long description of module's purpose
+        Estate
     """,
 
-    'author': "My Company",
-    'website': "https://www.yourcompany.com",
+    'author': "Netlinks Ltd",
+    'website': "https://www.netlinks.net",
 
     # Categories can be used to filter modules in modules listing
     # Check https://github.com/odoo/odoo/blob/16.0/odoo/addons/base/data/ir_module_category_data.xml
@@ -30,9 +28,7 @@
         'views/estate_propertys_tag_views.xml',
     ],
     # only loaded in demonstration mode
-    'demo': [
-        'demo/demo.xml',
-    ],
+    
 }
 
 
