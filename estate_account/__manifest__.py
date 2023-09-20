@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "Estate",
+    'name': "estate_account",
 
-     'summary': """
-        Estate""",
-    'description': """
-        Estate
+    'summary': """
+    estate_account
     """,
+
+    'description': """
+        estate_account    
+        """,
 
     'author': "Netlinks Ltd",
     'website': "https://www.netlinks.net",
@@ -18,27 +20,13 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base'],
+    'depends': ['estate_property', 'account'],
 
     # always loaded
     'data': [
-        'security/ir.model.access.csv',
-        'views/views.xml',
-        'views/estate_propertys_views.xml',
-        'views/estate_propertys_tag_views.xml',
-        'wizards/accept_reason_wizard_view.xml',
+        # 'security/ir.model.access.csv',
+        'views/estate_poperty_view.xml',
+        'views/account_move_inherit_view.xml',
     ],
     # only loaded in demonstration mode
-    
 }
-
-
-
-
-
-
-
-
-
-
-

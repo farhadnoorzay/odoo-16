@@ -12,8 +12,6 @@ from random import randint
 
 
 
-
-
 class EstateProperty(models.Model):
     _name = 'estate.property'
     _description = 'Estate Property'
@@ -22,13 +20,11 @@ class EstateProperty(models.Model):
 
     name = fields.Char(required=True)
     description = fields.Text()
-    description2 = fields.Text(readonly=True, default='''NOTE: Should you wish to switch to a different currency, we recommend visiting our currency                             
-    exchange service for a hassle-free currency conversion. Your satisfaction is our top priority!''')
-
+    description2 = fields.Html()
     postcode = fields.Char()
     date_availibility = fields.Date(copy=False, default=lambda self: date.today() + timedelta(days=90))
-    expected_price = fields.Float(required=True)
-    selling_price = fields.Float( copy=False)
+    expected_price = fields.Monetary(required=True)
+    selling_price = fields.Monetary(readonly=True, copy=False)
     bedrooms = fields.Integer(default=2)
     living_area = fields.Integer()
     facades = fields.Integer()
@@ -40,7 +36,6 @@ class EstateProperty(models.Model):
         ('south', 'South'),
         ('east', 'East'),
         ('west', 'West'),
-
     ])
     active = fields.Boolean(default=True)
     state = fields.Selection([
@@ -57,8 +52,8 @@ class EstateProperty(models.Model):
     buyer = fields.Many2one('res.partner')
     salesman = fields.Many2one('res.users', default=lambda self: self.env.user)
     total_area = fields.Float(compute='_compute_total_area')
-    best_price = fields.Float(compute='_compute_best_price')
-
+    best_price = fields.Monetary(compute='_compute_best_price')
+    currency_id = fields.Many2one('res.currency')
     _sql_constraints = [
         (
             'expected_price_positive',
@@ -79,7 +74,8 @@ class EstateProperty(models.Model):
 
     
 
-
+    offer_accept_reason = fields.Text(readonly=True)
+    offer_accept_date = fields.Date(readonly=True)
     
 
     amount_in_usd = fields.Float()
@@ -88,7 +84,6 @@ class EstateProperty(models.Model):
     total_in_afn = fields.Float(compute="compute_total_in_afn")
     total_in_usd = fields.Float(compute="compute_total_in_usd")
     exchange_rate =fields.Float()
-
 
 
 
@@ -168,7 +163,7 @@ class EstatePropertyType(models.Model):
             return {
                 'name': 'Offers',
                 'type': 'ir.actions.act_window',
-                # 'view_type': 'form,tree',
+                'view_type': 'form,tree',
                 'view_mode': 'tree,form',
                 'res_model': 'estate.property.offer',
                 'domain': [('property_type_id', '=', rec.id)],
@@ -215,7 +210,7 @@ class EstatePropertyOffer(models.Model):
     _order = 'price desc'
     _rec_name='partner_id'
 
-    price = fields.Float()
+    price = fields.Monetary()
     status = fields.Selection([
         ('accepted', 'Accepted'),
         ('refused', 'Refused'),
@@ -226,6 +221,7 @@ class EstatePropertyOffer(models.Model):
     validty = fields.Integer()
     date_deadline = fields.Date(compute='_compute_date_deadline')
     property_type_id = fields.Many2one(related='property_id.property_type_id', store=True)
+    currency_id = fields.Many2one(related='property_id.currency_id', store=True)
 
     _sql_constraints = [
         (
@@ -242,9 +238,8 @@ class EstatePropertyOffer(models.Model):
         if values.get('price') <= estate_property.best_price:
             raise ValidationError(f"The offer must be higher than {estate_property.best_price}")
         res = super(EstatePropertyOffer, self).create(values)
-        # res.property_id.state = 'offer_received'
+        res.property_id.state = 'offer_received'
         return res
-
     
 
     @api.depends('validty', 'create_date')
@@ -254,10 +249,14 @@ class EstatePropertyOffer(models.Model):
 
     def action_accept(self):
         for rec in self:
-            rec.property_id.selling_price = rec.price
-            rec.property_id.buyer = rec.partner_id.id
-            rec.status = 'accepted'
-
+            return {
+                'name': 'Accept Reason',
+                'type': 'ir.actions.act_window',
+                'res_model': 'accept.reason.wizard',
+                'view_mode': 'form',
+                'target' : 'new',
+                'context' : {'default_property_id': rec.property_id.id, 'default_offer_id': rec.id}
+            }
     def action_refuse(self):
         for rec in self:
             rec.status = 'refused'
@@ -265,6 +264,10 @@ class EstatePropertyOffer(models.Model):
 
 
 
+            # rec.property_id.selling_price = rec.price
+            # rec.property_id.buyer = rec.partner_id.id
+            # rec.status = 'accepted'
+            # print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
 
 
 
