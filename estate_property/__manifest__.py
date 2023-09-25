@@ -23,10 +23,12 @@
     # always loaded
     'data': [
         'security/ir.model.access.csv',
+        'data/sequence.xml',
         'views/views.xml',
         'views/estate_propertys_views.xml',
         'views/estate_propertys_tag_views.xml',
         'wizards/accept_reason_wizard_view.xml',
+    
     ],
     # only loaded in demonstration mode
     

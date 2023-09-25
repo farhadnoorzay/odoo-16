@@ -72,7 +72,18 @@ class EstateProperty(models.Model):
     #     if self.state not in ('new', 'cancelled'):
     #         raise ValidationError('Record can only be deleted in new or cancel states.')
 
+
+
+    ref = fields.Char(readonly=True, defualt="new")
+
     
+    @api.model
+    def create(self, values):
+        values['ref'] = self.env['ir.sequence'].next_by_code('generate.estate.property.sequence')
+        return super(EstateProperty, self).create(values)
+
+    
+
 
     offer_accept_reason = fields.Text(readonly=True)
     offer_accept_date = fields.Date(readonly=True)

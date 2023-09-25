@@ -17,3 +17,6 @@ class AccountMove(models.Model):
                 'res_id': rec.property_id.id,
             }
 
+
+
+

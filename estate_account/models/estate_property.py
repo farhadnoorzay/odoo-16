@@ -1,12 +1,17 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, fields, api, Command
-
+from odoo.exceptions import ValidationError
 class EstateProperty(models.Model):
     _inherit = 'estate.property'
 
     invoice_id = fields.Many2one('account.move')
     invoice_amount = fields.Integer(compute='_compute_invoice_amount')
+    currency_id = fields.Many2one('res.currency', defualt = lambda self: self.env.company.currency_id)
+
+
+    
+
 
     @api.depends('invoice_id')
     def _compute_invoice_amount(self):
@@ -20,6 +25,7 @@ class EstateProperty(models.Model):
             'partner_id': self.buyer.id,
             'move_type': 'out_invoice',
             'property_id': self.id,
+            'currency_id': self.currency_id.id,
              'invoice_line_ids': [
                 Command.create({
                     'name': f'6% of the selling price',
@@ -47,4 +53,15 @@ class EstateProperty(models.Model):
                 'view_mode': 'form',
                 'res_id': rec.invoice_id.id,
             }
+
+
+
+
+    def copy(self, default=None):
+        if self.state == 'sold':
+            raise ValidationError('You must not copy this')
+        return super().copy(default)
+
+
+
 

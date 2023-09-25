@@ -14,10 +14,3 @@
 #         ('refuse', 'Refused'),
 #     ])
 #     property_id = fields.Many2one('estate.property') 
-        
-
-
-
-
-
- 

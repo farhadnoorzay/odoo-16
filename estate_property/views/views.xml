@@ -40,10 +40,11 @@
                         
                     </div>
                     <div class="oe_title">
-                        <h1><field name="name" class="oe_inline"/></h1>
+                        <h1><field name="ref" class="oe_inline"/></h1>
                     </div>
                     <group>
                         <group>
+                            <field name="name"/>
                             <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
                             <field name="property_type_id" />
                             <field name="postcode" />
@@ -86,13 +87,13 @@
                         </page>
                         <page  name="other_info" string="Other Info">
                             <group>
-                                <field name="salesman" />
-                                <field name="buyer" />
+                                <field name="salesman"/>
+                                <field name="buyer"/>
                             </group>
                         </page>
                         <page name="reason" string="Reason" attrs="{'invisible': [('offer_accept_reason', '=' , False)]}">
                             <group>
-                                <field name="offer_accept_reason" />
+                                <field name="offer_accept_reason"/>
                                 <field name="offer_accept_date" />
                             </group>
                         </page>

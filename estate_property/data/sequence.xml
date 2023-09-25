@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <data noupdate="1">
+    <record id="generate_estate_property_sequence" model="ir.sequence">
+        <field name="name">Estate Sequence</field>
+        <field name="code">generate.estate.property.sequence</field>
+        <field name="prefix">EP-</field>
+        <field eval="1" name="number_next"/>
+        <field eval="5" name="padding"/>
+        <field eval="2" name="number_increment"/>
+        <field eval="False" name="company_id"/>
+    </record>        
+    </data>
+
+</odoo>
